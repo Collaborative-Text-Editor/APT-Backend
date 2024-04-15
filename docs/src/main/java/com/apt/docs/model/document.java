@@ -15,6 +15,7 @@ public class document {
     private String title;
     private byte[] content;
     private LocalDateTime created_at;
+    private int owner_id;
     public document() {
     }
     public LocalDateTime getCreated_at() {
@@ -23,7 +24,6 @@ public class document {
     public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
     }
-    private int owner_id;
     public int getId() {
         return id;
     }
