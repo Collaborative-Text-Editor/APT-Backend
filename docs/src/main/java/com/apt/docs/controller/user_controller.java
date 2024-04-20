@@ -24,14 +24,25 @@ public class user_controller {;
         return userService.getUsers();
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/user/id/{id}")
     public user getUserById(@PathVariable int id){
         return userService.getUserById(id);
+    }
+
+    @GetMapping("/user/username/{username}")
+    public user getUserByUsername(@PathVariable String username){
+        System.out.println("username: " + username);
+        return userService.getUserByUsername(username);
     }
 
     @DeleteMapping("/user/{id}")
     public void deleteUserById(@PathVariable int id){
         userService.deleteUserById(id);
+    }
+
+    @DeleteMapping("/user/username/{username}")
+    public void deleteUserByUsername(@PathVariable String username){
+        userService.deleteUserByUsername(username);
     }
 
     @PostMapping("/user")

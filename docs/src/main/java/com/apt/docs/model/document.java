@@ -1,17 +1,18 @@
 package com.apt.docs.model;
 
 import java.time.LocalDateTime;
-// import javax.persistence.Entity;
-// import javax.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
-
-// @Table(name = "DOCUMENTS")
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "documents")
 public class document {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @NotEmpty
     private String title;
@@ -44,7 +45,7 @@ public class document {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime created_at) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

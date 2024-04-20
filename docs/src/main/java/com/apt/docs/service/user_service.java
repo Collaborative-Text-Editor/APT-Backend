@@ -22,6 +22,8 @@ public class user_service {
     }
 
     public user getUserByUsername(String username) {
+        user user = userRepository.findByUsername(username);
+        System.out.println("user: " + user);
         return userRepository.findByUsername(username);
     }
 
@@ -35,5 +37,10 @@ public class user_service {
         user.setPassword(password);
         userRepository.save(user);
         return user;
+    }
+
+    public void deleteUserByUsername(String username) {
+        user user = userRepository.findByUsername(username);
+        userRepository.delete(user);
     }
 }
