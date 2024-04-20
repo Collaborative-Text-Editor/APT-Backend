@@ -1,51 +1,75 @@
 package com.apt.docs.model;
 
 import java.time.LocalDateTime;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
-
+// import javax.persistence.Entity;
+// import javax.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 
-@Table( "DOCUMENTS")
+// @Table(name = "DOCUMENTS")
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class document {
     @Id
     private int id;
     @NotEmpty
     private String title;
     private byte[] content;
-    private LocalDateTime created_at;
-    private int owner_id;
+    private LocalDateTime createdAt;
+    private String ownerUsername;
+    private int ownerId;
+
     public document() {
+
     }
-    public LocalDateTime getCreated_at() {
-        return created_at;
+
+    public String getOwnerUsername() {
+        return ownerUsername;
     }
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
+
+    public void setOwnerUsername(String ownerUsername) {
+        this.ownerUsername = ownerUsername;
     }
+
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerid) {
+        this.ownerId = ownerid;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime created_at) {
+        this.createdAt = createdAt;
+    }
+
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public byte[] getContent() {
         return content;
     }
+
     public void setContent(byte[] content) {
         this.content = content;
     }
-    public int getOwner_id() {
-        return owner_id;
-    }
-    public void setOwner_id(int owner_id) {
-        this.owner_id = owner_id;
-    }
+
 }

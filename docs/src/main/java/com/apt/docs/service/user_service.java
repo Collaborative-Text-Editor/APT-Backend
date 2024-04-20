@@ -21,10 +21,14 @@ public class user_service {
         return userRepository.findById(id).orElse(null);
     }
 
+    public user getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     public void deleteUserById(int id) {
         userRepository.deleteById(id);
     }
-    
+
     public user saveUser(String username, String password) {
         user user = new user();
         user.setUsername(username);

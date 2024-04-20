@@ -10,24 +10,30 @@ import com.apt.docs.repository.document_repository;
 @Service
 public class document_service {
     private final document_repository documentRepository;
+
     public document_service(document_repository documentRepository) {
         this.documentRepository = documentRepository;
     }
+
     public Iterable<document> getDocuments() {
         return documentRepository.findAll();
     }
+
     public document getDocumentById(int id) {
         return documentRepository.findById(id).orElse(null);
     }
+
     public void deleteDocumentById(int id) {
         documentRepository.deleteById(id);
     }
-    public document saveDocument(String title, byte[] content, int owner_id) {
+
+    public document saveDocument(String title, byte[] content, int owner_id, String ownerUsername) {
         document document = new document();
-        document.setCreated_at(LocalDateTime.now());
+        document.setCreatedAt(LocalDateTime.now());
         document.setTitle(title);
         document.setContent(content);
-        document.setOwner_id(owner_id);
+        document.setOwnerUsername(ownerUsername);
+        document.setOwnerId(owner_id);
         documentRepository.save(document);
         return document;
     }

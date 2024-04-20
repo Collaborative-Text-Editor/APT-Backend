@@ -1,37 +1,65 @@
 package com.apt.docs.model;
 
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.jpa.repository.JpaRepository;
+//import org.springframework.data.relational.core.mapping.Table;
+// import javax.persistence.Entity;
+// import javax.persistence.Table;
+// @Table(name = "DOCUMENT_PERMISSIONS")
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-@Table("DOCUMENT_PERMISSIONS")
+@Entity
 public class document_permission {
+    @Id
     private int id;
-    private int document_id;
-    private int user_id;
-    private String permission_type;
+    private int documentId;
+    private int userId;
+    private String username;
+    private String permissionType;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * ---bahebokokooooooo
+     * ---moooootttttttt
+     * 
+     */
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
-    public int getDocument_id() {
-        return document_id;
+
+    public int getDocumentId() {
+        return documentId;
     }
-    public void setDocument_id(int document_id) {
-        this.document_id = document_id;
+
+    public void setDocumentId(int documentId) {
+        this.documentId = documentId;
     }
-    public int getUser_id() {
-        return user_id;
+
+    public int getUserId() {
+        return userId;
     }
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
-    public String getPermission_type() {
-        return permission_type;
+
+    public String getPermissionType() {
+        return permissionType;
     }
-    public void setPermission_type(String permission_type) {
-        this.permission_type = permission_type;
+
+    public void setPermissionType(String permissionType) {
+        this.permissionType = permissionType;
     }
-    
-    
+
 }
