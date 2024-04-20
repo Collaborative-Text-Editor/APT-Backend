@@ -5,14 +5,18 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import com.apt.docs.model.document;
+import com.apt.docs.model.user;
 import com.apt.docs.repository.document_repository;
+import com.apt.docs.repository.user_repository;
 
 @Service
 public class document_service {
     private final document_repository documentRepository;
+    private final user_repository userRepository;
 
-    public document_service(document_repository documentRepository) {
+    public document_service(document_repository documentRepository, user_repository userRepository) {
         this.documentRepository = documentRepository;
+        this.userRepository = userRepository;
     }
 
     public Iterable<document> getDocuments() {
@@ -27,12 +31,13 @@ public class document_service {
         documentRepository.deleteById(id);
     }
 
-    public document saveDocument(String title, byte[] content, String ownerUsername) {
+    public document saveDocument(String title, byte[] content, int ownerId) {
         document document = new document();
+        user user = userRepository.findById(ownerId).orElse(null);
         document.setCreatedAt(LocalDateTime.now());
         document.setTitle(title);
         document.setContent(content);
-        document.setOwnerUsername(ownerUsername);
+        document.setOwner(user);
         documentRepository.save(document);
         return document;
     }

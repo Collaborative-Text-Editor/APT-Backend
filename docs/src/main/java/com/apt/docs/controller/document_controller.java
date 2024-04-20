@@ -32,12 +32,15 @@ public class document_controller {
     public document getDocumentById(@PathVariable int id) {
         return documentService.getDocumentById(id);
     }
-    // @GetMapping("/document/{id}/editors")
-    // public Iterable<document_permission> getEditorsOfDocument(@PathVariable int
-    // id){
-    // return documentPermissionService.getEditorsOfDocument(id);
-    // }
-
+    @GetMapping("/document/{id}/editors")
+    public Iterable<document_permission> getEditorsByDocumentId(@PathVariable int id) {
+        return documentPermissionService.getEditorsByDocumentId(id);
+    }
+    //get owner
+    @GetMapping("/document/{id}/owner")
+    public Iterable<document_permission> getOwnerOfDocument(@PathVariable int id) {
+        return documentPermissionService.getOwnerOfDocument(id);
+    }
     @DeleteMapping("/document/{id}")
     public void deleteDocumentById(@PathVariable int id) {
         documentService.deleteDocumentById(id);
@@ -46,7 +49,12 @@ public class document_controller {
     @PostMapping("/document")
     public document saveDocument(@RequestBody document document) {
         return documentService.saveDocument(document.getTitle(), document.getContent(),
-                document.getOwnerUsername());
+                document.getOwner().getId());
+    }
+
+    @PostMapping("/document/{id}/editor/{username}")
+    public void addEditorToDocument(@PathVariable int id, @PathVariable String username) {
+        documentPermissionService.saveDocumentPermission(id, username, "editor");
     }
 
 }

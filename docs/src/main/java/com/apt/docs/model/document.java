@@ -2,10 +2,13 @@ package com.apt.docs.model;
 
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,18 +21,24 @@ public class document {
     private String title;
     private byte[] content;
     private LocalDateTime createdAt;
-    private String ownerUsername;
+    @NotNull
+    @ManyToOne
+    @JoinColumn(
+    name = "owner_id", 
+    referencedColumnName = "id" 
+    )
+    private user owner;
+
+    public user getOwner() {
+        return owner;
+    }
+
+    public void setOwner(user owner) {
+        this.owner = owner;
+    }
 
     public document() {
 
-    }
-
-    public String getOwnerUsername() {
-        return ownerUsername;
-    }
-
-    public void setOwnerUsername(String ownerUsername) {
-        this.ownerUsername = ownerUsername;
     }
 
     public LocalDateTime getCreatedAt() {

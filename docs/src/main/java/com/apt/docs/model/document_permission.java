@@ -1,5 +1,8 @@
 package com.apt.docs.model;
 
+import javax.swing.text.Document;
+
+import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import jakarta.annotation.Generated;
@@ -11,7 +14,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "document_permissions")
@@ -19,18 +25,17 @@ public class document_permission {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int documentId;
-    private int userId;
-    private String username;
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "document_id", referencedColumnName = "id")
+    private document document;
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private user user;
     private String permissionType;
 
-    public String getUsername() {
-        return username;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     /**
      * ---bahebokokooooooo
@@ -45,28 +50,28 @@ public class document_permission {
         this.id = id;
     }
 
-    public int getDocumentId() {
-        return documentId;
-    }
-
-    public void setDocumentId(int documentId) {
-        this.documentId = documentId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public String getPermissionType() {
         return permissionType;
     }
 
     public void setPermissionType(String permissionType) {
         this.permissionType = permissionType;
+    }
+
+    public document getDocument() {
+        return document;
+    }
+
+    public void setDocument(document document) {
+        this.document = document;
+    }
+
+    public user getUser() {
+        return user;
+    }
+
+    public void setUser(user user) {
+        this.user = user;
     }
 
 }
