@@ -19,7 +19,6 @@ public class document {
     private byte[] content;
     private LocalDateTime createdAt;
     private String ownerUsername;
-    private int ownerId;
 
     public document() {
 
@@ -31,14 +30,6 @@ public class document {
 
     public void setOwnerUsername(String ownerUsername) {
         this.ownerUsername = ownerUsername;
-    }
-
-    public int getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(int ownerid) {
-        this.ownerId = ownerid;
     }
 
     public LocalDateTime getCreatedAt() {

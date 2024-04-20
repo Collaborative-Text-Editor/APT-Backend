@@ -45,7 +45,7 @@ public class document_controller {
 
     @PostMapping("/document")
     public document saveDocument(@RequestBody document document) {
-        return documentService.saveDocument(document.getTitle(), document.getContent(), document.getOwnerId(),
+        return documentService.saveDocument(document.getTitle(), document.getContent(),
                 document.getOwnerUsername());
     }
 

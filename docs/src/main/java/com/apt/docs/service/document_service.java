@@ -27,13 +27,12 @@ public class document_service {
         documentRepository.deleteById(id);
     }
 
-    public document saveDocument(String title, byte[] content, int owner_id, String ownerUsername) {
+    public document saveDocument(String title, byte[] content, String ownerUsername) {
         document document = new document();
         document.setCreatedAt(LocalDateTime.now());
         document.setTitle(title);
         document.setContent(content);
         document.setOwnerUsername(ownerUsername);
-        document.setOwnerId(owner_id);
         documentRepository.save(document);
         return document;
     }
