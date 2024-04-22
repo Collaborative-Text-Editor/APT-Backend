@@ -78,4 +78,9 @@ public class document_controller {
         return documentPermissionService.getDocumentPermissions();
     }
 
+    @DeleteMapping("/document/{id}/permissions/{username}")
+    public void deleteDocumentPermission(@PathVariable int id, @PathVariable String username) {
+        documentPermissionService.deleteDocumentPermission(id, username);
+    }
+
 }
