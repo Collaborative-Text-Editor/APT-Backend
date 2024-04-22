@@ -48,7 +48,7 @@ public class document_controller {
         return documentService.saveDocument(document.getTitle(), document.getContent(),
                 document.getOwnerUsername());
     }
-
+    
 }
 // get owner of doc
 // get editors of doc

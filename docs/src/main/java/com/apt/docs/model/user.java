@@ -1,5 +1,6 @@
 package com.apt.docs.model;
 
+import org.hibernate.validator.constraints.UniqueElements;
 //import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.jpa.repository.JpaRepository;
 // import javax.persistence.Entity;
@@ -19,7 +20,7 @@ public class user {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @NotNull
+    @UniqueElements
     private String username;
     @NotNull
     private String password;
