@@ -31,14 +31,20 @@ public class document_service {
         documentRepository.deleteById(id);
     }
 
-    public document saveDocument(String title, byte[] content, int ownerId) {
+    public document saveDocument(String title, byte[] content, String username) {
         document document = new document();
-        user user = userRepository.findById(ownerId).orElse(null);
+        user user = userRepository.findByUsername(username);
         document.setCreatedAt(LocalDateTime.now());
         document.setTitle(title);
         document.setContent(content);
         document.setOwner(user);
         documentRepository.save(document);
         return document;
+    }
+
+    public Iterable<document> getDocumentsByUsername(String username) {
+        user user = userRepository.findByUsername(username);
+        System.out.println("user: " + user);
+        return documentRepository.findByOwner(user);
     }
 }
