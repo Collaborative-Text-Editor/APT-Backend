@@ -7,6 +7,7 @@ import com.apt.docs.model.user;
 import com.apt.docs.repository.document_permission_repository;
 import com.apt.docs.repository.document_repository;
 import com.apt.docs.repository.user_repository;
+import com.apt.docs.model.document_permission_id;
 
 @Service
 public class document_permission_service {
@@ -86,6 +87,10 @@ public class document_permission_service {
 
         // Create a new DocumentPermission object
         document_permission documentPermission = new document_permission();
+        document_permission_id dpID=new document_permission_id();
+        dpID.setDocumentId(document.getId());
+        dpID.setUser_Id(user.getId());
+        documentPermission.setId(dpID);
         documentPermission.setDocument(document);
         documentPermission.setUser(user);
         documentPermission.setPermissionType(permissionType); // Assuming PermissionType enum exists
