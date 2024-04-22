@@ -32,11 +32,17 @@ public class document_controller {
     public document getDocumentById(@PathVariable int id) {
         return documentService.getDocumentById(id);
     }
-    // @GetMapping("/document/{id}/editors")
-    // public Iterable<document_permission> getEditorsOfDocument(@PathVariable int
-    // id){
-    // return documentPermissionService.getEditorsOfDocument(id);
-    // }
+
+    @GetMapping("/document/{id}/editors")
+    public Iterable<document_permission> getEditorsByDocumentId(@PathVariable int id) {
+        return documentPermissionService.getEditorsByDocumentId(id);
+    }
+
+    // get owner
+    @GetMapping("/document/{id}/owner")
+    public Iterable<document_permission> getOwnerOfDocument(@PathVariable int id) {
+        return documentPermissionService.getOwnerOfDocument(id);
+    }
 
     @DeleteMapping("/document/{id}")
     public void deleteDocumentById(@PathVariable int id) {
@@ -45,10 +51,31 @@ public class document_controller {
 
     @PostMapping("/document")
     public document saveDocument(@RequestBody document document) {
-        return documentService.saveDocument(document.getTitle(), document.getContent(),
-                document.getOwnerUsername());
+        document doc = documentService.saveDocument(document.getTitle(), document.getContent(),
+                document.getOwner().getUsername());
+        documentPermissionService.saveDocumentPermission(doc.getId(), document.getOwner().getUsername(), "owner");
+        return doc;
     }
-    
+
+    @PostMapping("/document/{id}/editor/{username}")
+    public void addEditorToDocument(@PathVariable int id, @PathVariable String username) {
+        documentPermissionService.saveDocumentPermission(id, username, "editor");
+    }
+
+    @PostMapping("/document/{id}/viewer/{username}")
+    public void addViewerToDocument(@PathVariable int id, @PathVariable String username) {
+        documentPermissionService.saveDocumentPermission(id, username, "viewer");
+    }
+
+    // get documents of user by useername
+    @GetMapping("/document/owner/{username}")
+    public Iterable<document> getDocumentsByUsername(@PathVariable String username) {
+        return documentService.getDocumentsByUsername(username);
+    }
+
+    @GetMapping("/document/permissions")
+    public Iterable<document_permission> getDocumentPermissions() {
+        return documentPermissionService.getDocumentPermissions();
+    }
+
 }
-// get owner of doc
-// get editors of doc
