@@ -1,5 +1,6 @@
 package com.apt.docs.model;
 
+import org.hibernate.validator.constraints.UniqueElements;
 //import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.jpa.repository.JpaRepository;
 // import javax.persistence.Entity;
