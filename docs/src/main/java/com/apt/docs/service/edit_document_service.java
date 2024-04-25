@@ -14,7 +14,9 @@ public class edit_document_service {
     }
 
     public void insertTextInDocument(int id, int index, byte[] newContent) {
+
         documentRepository.findById(id).ifPresent(document -> {
+
             byte[] oldContent = document.getContent();
             byte[] updatedContent = new byte[oldContent.length + newContent.length];
 
@@ -26,14 +28,19 @@ public class edit_document_service {
             documentRepository.save(document);
 
         });
+
+    }
+
+        public void deleteTextFromDocument(int id, int index, int length) {
+            documentRepository.findById(id).ifPresent(document -> {
+                byte[] oldContent = document.getContent();
+                byte[] updatedContent = new byte[oldContent.length - 1];
         
-
-    }
-
-    public void deleteTextFromDocument(int id, int index, int length) {
-        documentRepository.findById(id).ifPresent(document -> {
-           
-        });
-    }
+                System.arraycopy(oldContent, 0, updatedContent, 0, index);
+                System.arraycopy(oldContent, index + 1, updatedContent, index, oldContent.length - index - 1);
+        
+                document.setContent(updatedContent);
+                documentRepository.save(document);});
+        }
 
 }
