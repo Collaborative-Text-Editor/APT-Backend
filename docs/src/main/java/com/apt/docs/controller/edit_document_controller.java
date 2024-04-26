@@ -2,11 +2,12 @@ package com.apt.docs.controller;
 
 import com.apt.docs.service.edit_document_service;
 import com.apt.docs.model.DocumentUpdate; // import the new class
+import com.apt.docs.model.DocumentDelete; // import the new class
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
+
 
 @RestController
 public class edit_document_controller {
@@ -21,8 +22,8 @@ public class edit_document_controller {
         editDocumentService.insertTextInDocument(update.getId(), update.getIndex(), update.getNewContent());
     }
 
-    @DeleteMapping("/deleteFromDocument")
-    public void deleteFromDocument(int id, int index, int length) {
-        editDocumentService.deleteTextFromDocument(id, index, length);
+    @PostMapping("/deleteFromDocument")
+    public void deleteFromDocument(@RequestBody DocumentDelete delete) {
+        editDocumentService.deleteTextFromDocument(delete.getId(), delete.getIndex(), delete.getLength());
     }
 }

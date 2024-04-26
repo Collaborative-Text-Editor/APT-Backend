@@ -1,5 +1,7 @@
 package com.apt.docs.service;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Service;
 
 import com.apt.docs.model.document;
@@ -12,7 +14,7 @@ public class edit_document_service {
     public edit_document_service(document_repository documentRepository) {
         this.documentRepository = documentRepository;
     }
-
+    
     public void insertTextInDocument(int id, int index, byte[] newContent) {
 
         documentRepository.findById(id).ifPresent(document -> {
@@ -31,16 +33,16 @@ public class edit_document_service {
 
     }
 
-        public void deleteTextFromDocument(int id, int index, int length) {
-            documentRepository.findById(id).ifPresent(document -> {
-                byte[] oldContent = document.getContent();
-                byte[] updatedContent = new byte[oldContent.length - 1];
-        
-                System.arraycopy(oldContent, 0, updatedContent, 0, index);
-                System.arraycopy(oldContent, index + 1, updatedContent, index, oldContent.length - index - 1);
-        
-                document.setContent(updatedContent);
-                documentRepository.save(document);});
-        }
+    public void deleteTextFromDocument(int id, int index, int length) {
+        documentRepository.findById(id).ifPresent(document -> {
+            byte[] oldContent = document.getContent();
+            byte[] updatedContent = new byte[oldContent.length - length];
 
+            System.arraycopy(oldContent, 0, updatedContent, 0, index);
+            System.arraycopy(oldContent, index + length, updatedContent, index, oldContent.length - index - length);
+
+            document.setContent(updatedContent);
+            documentRepository.save(document);
+        });
+    }
 }
