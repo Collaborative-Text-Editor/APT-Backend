@@ -1,4 +1,5 @@
 package com.apt.docs.service;
+
 import org.springframework.stereotype.Service;
 
 import com.apt.docs.model.document;
@@ -50,31 +51,31 @@ public class document_permission_service {
                 .orElseThrow(() -> new IllegalArgumentException("Document not found with id: " + documentId));
 
         user user = userRepository.findByUsername(username);
-        if(user == null) {
+        if (user == null) {
             throw new IllegalArgumentException("User not found with username: " + username);
         }
-        System.out.println("user: " + user);
 
         document_permission documentPermission = new document_permission();
-        document_permission_id dpID=new document_permission_id();
+        document_permission_id dpID = new document_permission_id();
         dpID.setDocumentId(document.getId());
         dpID.setUser_Id(user.getId());
         documentPermission.setId(dpID);
         documentPermission.setDocument(document);
         documentPermission.setUser(user);
-        documentPermission.setPermissionType(permissionType); 
+        documentPermission.setPermissionType(permissionType);
 
         documentPermissionRepository.save(documentPermission);
     }
+
     @Transactional
     public void deleteDocumentPermission(int id, String username) {
         user user = userRepository.findByUsername(username);
         if (user != null) {
             documentPermissionRepository.deleteByDocumentIdAndUserId(id, user.getId());
         }
-        // } else {
-        //     throw new UsernameNotFoundException("User not found with username: " + username);
-        // }
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with username: " + username);
+        }
     }
 
 }
