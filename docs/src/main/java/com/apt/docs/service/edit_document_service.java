@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
+import com.apt.docs.model.DocumentUpdate;
 import com.apt.docs.model.document;
 import com.apt.docs.repository.document_repository;
 import java.util.concurrent.locks.ReentrantLock;
@@ -53,4 +54,15 @@ public class edit_document_service {
             lock.unlock();
         }
     }
+    public void applyEdit(DocumentUpdate update) {
+    document document = documentRepository.findById(update.getId())
+        .orElseThrow(() -> new RuntimeException("Document not found"));
+
+    // Apply the update to the document
+    document.setContent(update.getNewContent());
+
+    // Save the updated document back to the database
+    documentRepository.save(document);
+}
+
 }
