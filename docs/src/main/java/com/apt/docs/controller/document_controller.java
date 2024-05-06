@@ -1,5 +1,7 @@
 package com.apt.docs.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,13 +60,26 @@ public class document_controller {
     }
 
     @PostMapping("/document/{id}/editor/{username}")
-    public void addEditorToDocument(@PathVariable int id, @PathVariable String username) {
-        documentPermissionService.saveDocumentPermission(id, username, "editor");
+    public ResponseEntity<String> addEditorToDocument(@PathVariable int id, @PathVariable String username) {
+        try {
+            // call to the saveDocumentPermission method that might throw
+            documentPermissionService.saveDocumentPermission(id, username, "editor");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return null;
     }
 
     @PostMapping("/document/{id}/viewer/{username}")
-    public void addViewerToDocument(@PathVariable int id, @PathVariable String username) {
-        documentPermissionService.saveDocumentPermission(id, username, "viewer");
+    public ResponseEntity<String> addViewerToDocument(@PathVariable int id, @PathVariable String username) {
+        try {
+            // call to the saveDocumentPermission method that might throw
+            documentPermissionService.saveDocumentPermission(id, username, "viewer");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return null;
     }
 
     // get documents of user by useername
@@ -76,6 +91,17 @@ public class document_controller {
     @GetMapping("/document/permissions")
     public Iterable<document_permission> getDocumentPermissions() {
         return documentPermissionService.getDocumentPermissions();
+    }
+
+    @DeleteMapping("/document/{id}/permissions/{username}")
+    public ResponseEntity<String> deleteDocumentPermission(@PathVariable int id, @PathVariable String username) {
+        try {
+            // call to the saveDocumentPermission method that might throw
+            documentPermissionService.deleteDocumentPermission(id, username);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return null;
     }
 
 }
