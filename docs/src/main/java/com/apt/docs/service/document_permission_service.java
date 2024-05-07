@@ -8,12 +8,15 @@ import com.apt.docs.repository.document_permission_repository;
 import com.apt.docs.repository.document_repository;
 import com.apt.docs.repository.user_repository;
 import com.apt.docs.model.document_permission_id;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 @Service
 public class document_permission_service {
     private final document_permission_repository documentPermissionRepository;
     private final document_repository documentRepository;
     private final user_repository userRepository;
+    
 
     public document_permission_service(document_permission_repository documentPermissionRepository,
             document_repository documentRepository, user_repository userRepository) {
