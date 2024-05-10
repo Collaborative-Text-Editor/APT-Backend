@@ -51,7 +51,7 @@ public class user_controller {;
     }
 
     @PostMapping("/user/login")
-    public user userValid(@RequestBody @Valid user user){
+    public user loginUser(@RequestBody @Valid user user){
         return userService.loginUser(user);
     }
 
