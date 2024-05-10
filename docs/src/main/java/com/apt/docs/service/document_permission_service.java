@@ -8,7 +8,8 @@ import com.apt.docs.repository.document_permission_repository;
 import com.apt.docs.repository.document_repository;
 import com.apt.docs.repository.user_repository;
 import com.apt.docs.model.document_permission_id;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+
 
 
 @Service
@@ -70,6 +71,9 @@ public class document_permission_service {
 
     public Iterable<document_permission> getEditorsByDocumentId(int id) {
         return documentPermissionRepository.findByDocumentIdAndPermissionType(id, "editor");
+    }
+    public Iterable<document_permission> getViewersByDocumentId(int id) {
+        return documentPermissionRepository.findByDocumentIdAndPermissionType(id, "viewer");
     }
 
     public Iterable<document_permission> getOwnerOfDocument(int id) {

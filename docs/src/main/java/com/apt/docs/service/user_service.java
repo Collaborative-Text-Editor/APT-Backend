@@ -51,12 +51,16 @@ public class user_service {
     }
 
 
-    public boolean userValid(user user) {
-        user user1 = userRepository.findByUsername(user.getUsername());
-        if (user1 == null) {
-            return false;
+    public user loginUser(user user) {
+        user foundUser = userRepository.findByUsername(user.getUsername());
+        if (foundUser == null) {
+            return null;
         }
-        return checkUserPassword(user.getPassword(), user1.getPassword());
+        boolean passwordMatches = checkUserPassword(user.getPassword(), foundUser.getPassword());
+        if (!passwordMatches) {
+            return null;
+        }
+        return foundUser;
     }
 
     public boolean checkUserPassword(String rawPassword, String encodedPassword) {

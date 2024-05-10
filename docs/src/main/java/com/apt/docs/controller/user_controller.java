@@ -51,8 +51,8 @@ public class user_controller {;
     }
 
     @PostMapping("/user/login")
-    public boolean userValid(@RequestBody @Valid user user){
-        return userService.userValid(user);
+    public user userValid(@RequestBody @Valid user user){
+        return userService.loginUser(user);
     }
 
 }
