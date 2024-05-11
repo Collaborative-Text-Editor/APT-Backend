@@ -55,6 +55,8 @@ public class document_controller {
     public document saveDocument(@RequestBody document document) {
         document doc = documentService.saveDocument(document.getTitle(), document.getContent(),
                 document.getOwner().getUsername());
+
+        System.out.println(document);
         documentPermissionService.saveDocumentPermission(doc.getId(), document.getOwner().getUsername(), "owner");
         return doc;
     }
@@ -87,6 +89,18 @@ public class document_controller {
     public Iterable<document> getDocumentsByUsername(@PathVariable String username) {
         return documentService.getDocumentsByUsername(username);
     }
+
+    // get documents where user is editor by useername
+    @GetMapping("/document/editor/{username}")
+    public Iterable<document_permission> getEditorDocumentsByUsername(@PathVariable String username) {
+        return documentPermissionService.getEditorDocumentsByUsername(username);
+    }
+
+     // get documents where user is viewer by useername
+     @GetMapping("/document/viewer/{username}")
+     public Iterable<document_permission> getViewerDocumentsByUsername(@PathVariable String username) {
+         return documentPermissionService.getViewerDocumentsByUsername(username);
+     }
 
     @GetMapping("/document/permissions")
     public Iterable<document_permission> getDocumentPermissions() {

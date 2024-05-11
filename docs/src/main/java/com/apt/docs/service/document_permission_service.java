@@ -78,4 +78,15 @@ public class document_permission_service {
         }
     }
 
+    public Iterable<document_permission> getEditorDocumentsByUsername(String username) {
+        user user = userRepository.findByUsername(username);
+
+        return documentPermissionRepository.findByUser_IdAndPermissionType(user.getId(), "editor");
+    }
+
+    public Iterable<document_permission> getViewerDocumentsByUsername(String username) {
+        user user = userRepository.findByUsername(username);
+        return documentPermissionRepository.findByUser_IdAndPermissionType(user.getId(), "viewer");
+    }
+
 }
