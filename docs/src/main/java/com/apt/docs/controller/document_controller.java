@@ -2,13 +2,14 @@ package com.apt.docs.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.apt.docs.model.document;
 import com.apt.docs.model.document_permission;
 import com.apt.docs.service.document_permission_service;
@@ -48,7 +49,12 @@ public class document_controller {
 
     @DeleteMapping("/document/{id}")
     public void deleteDocumentById(@PathVariable int id) {
-        documentService.deleteDocumentById(id);
+        documentService.deleteDocumentByID(id);
+    }
+
+    @GetMapping("/document/{id}/viewers")
+    public Iterable<document_permission> getViewersByDocumentId(@PathVariable int id) {
+        return documentPermissionService.getViewersByDocumentId(id);
     }
 
     @PostMapping("/document")
@@ -96,11 +102,11 @@ public class document_controller {
         return documentPermissionService.getEditorDocumentsByUsername(username);
     }
 
-     // get documents where user is viewer by useername
-     @GetMapping("/document/viewer/{username}")
-     public Iterable<document_permission> getViewerDocumentsByUsername(@PathVariable String username) {
-         return documentPermissionService.getViewerDocumentsByUsername(username);
-     }
+    // get documents where user is viewer by useername
+    @GetMapping("/document/viewer/{username}")
+    public Iterable<document_permission> getViewerDocumentsByUsername(@PathVariable String username) {
+        return documentPermissionService.getViewerDocumentsByUsername(username);
+    }
 
     @GetMapping("/document/permissions")
     public Iterable<document_permission> getDocumentPermissions() {
@@ -116,6 +122,30 @@ public class document_controller {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
         return null;
+    }
+
+    @DeleteMapping("/document/{id}")
+    public ResponseEntity<String> deleteDocumentByID(@PathVariable int id) {
+
+        System.out.println("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+
+        try {
+            documentService.deleteDocumentByID(id);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return null;
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PatchMapping("/document/{id}/{title}")
+    public ResponseEntity<String> changeDocumentTitle(@PathVariable int id, @PathVariable String title) {
+        try {
+            documentService.changeDocumentTitle(id, title);
+            return ResponseEntity.ok("Document title changed successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }

@@ -30,6 +30,15 @@ public class document_permission_service {
         documentPermissionRepository.deleteById(id);
     }
 
+    // public void saveDocumentPermission(int document_id,String username,String
+    // permission_type) {
+    // document_permission documentPermission = new document_permission();
+    // documentPermission.setDocumentId(document_id);
+    // documentPermission.setUsername(username);
+    // documentPermission.setPermissionType(permission_type);
+    // documentPermissionRepository.save(documentPermission);
+    // }
+
     public Iterable<document_permission> getDocumentPermissions() {
         return documentPermissionRepository.findAll();
     }
@@ -40,6 +49,10 @@ public class document_permission_service {
 
     public Iterable<document_permission> getEditorsByDocumentId(int id) {
         return documentPermissionRepository.findByDocumentIdAndPermissionType(id, "editor");
+    }
+
+    public Iterable<document_permission> getViewersByDocumentId(int id) {
+        return documentPermissionRepository.findByDocumentIdAndPermissionType(id, "viewer");
     }
 
     public Iterable<document_permission> getOwnerOfDocument(int id) {
@@ -65,6 +78,10 @@ public class document_permission_service {
         documentPermission.setPermissionType(permissionType);
 
         documentPermissionRepository.save(documentPermission);
+    }
+
+    public void deleteDocumentPermissionByDocumentId(int id) {
+        documentPermissionRepository.deleteByDocumentId(id);
     }
 
     @Transactional

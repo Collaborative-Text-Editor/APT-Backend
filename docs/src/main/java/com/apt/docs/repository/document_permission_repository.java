@@ -15,5 +15,7 @@ public interface document_permission_repository extends JpaRepository<document_p
 
     Iterable<document_permission> findByUser_IdAndPermissionType(int id, String string);
 
+    Iterable<document_permission> findByUserIdAndPermissionType(int user_id, String string);
+    void deleteByDocumentId(int id);
 
 }
