@@ -100,7 +100,7 @@ public class document_permission_service {
         documentPermission.setId(dpID);
         documentPermission.setDocument(document);
         documentPermission.setUser(user);
-        documentPermission.setPermissionType(permissionType); // Assuming PermissionType enum exists
+        documentPermission.setPermissionType(permissionType); 
 
         // Save the document permission
         documentPermissionRepository.save(documentPermission);

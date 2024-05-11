@@ -2,8 +2,11 @@ package com.apt.docs.service;
 
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.apt.docs.DocumentEditWebSocketHandler;
 import com.apt.docs.model.DocumentUpdate;
 import com.apt.docs.model.document;
 import com.apt.docs.repository.document_repository;
@@ -14,8 +17,18 @@ public class edit_document_service {
     private final document_repository documentRepository;
     private static final ReentrantLock lock = new ReentrantLock();
 
+        @Autowired
+    private SimpMessagingTemplate template;
+
+    // @Autowired
+    // private DocumentEditWebSocketHandler documentEditWebSocketHandler;
+
     public edit_document_service(document_repository documentRepository) {
         this.documentRepository = documentRepository;
+    }
+
+    public void broadcastUpdate(byte[] update) {
+        template.convertAndSend("/topic/document-edit", update);
     }
 
     public void insertTextInDocument(int id, int index, byte[] newContent) {
@@ -31,6 +44,7 @@ public class edit_document_service {
 
                 document.setContent(updatedContent);
                 documentRepository.save(document);
+                broadcastUpdate(updatedContent);
             });
         } finally {
             lock.unlock();
@@ -49,6 +63,7 @@ public class edit_document_service {
 
                 document.setContent(updatedContent);
                 documentRepository.save(document);
+                broadcastUpdate(updatedContent);
             });
         } finally {
             lock.unlock();

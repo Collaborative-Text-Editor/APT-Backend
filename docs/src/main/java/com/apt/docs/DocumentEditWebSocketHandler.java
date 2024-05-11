@@ -15,13 +15,14 @@ public class DocumentEditWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     private edit_document_service editDocumentService;
 
-    @Autowired
-    private SimpMessagingTemplate template;
-
+    // @Autowired
+    // private SimpMessagingTemplate template;
+ 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         // Parse the message to a DocumentUpdate
         DocumentUpdate update = parseMessage(message.getPayload());
+        System.out.println("Received message: " + update);
     
         // Determine whether it's an insert or delete operation
         if (update.getOperation().equals("insert")) {
@@ -33,7 +34,7 @@ public class DocumentEditWebSocketHandler extends TextWebSocketHandler {
         }
     
         // Broadcast the update to all other clients
-        template.convertAndSend("/topic/document-edit", update);
+        // template.convertAndSend("/topic/document-edit", update);
     }
 
     //hatboooz mot
@@ -45,4 +46,6 @@ public class DocumentEditWebSocketHandler extends TextWebSocketHandler {
             throw new RuntimeException("Failed to parse message", e);
         }
     }
+
+
 }

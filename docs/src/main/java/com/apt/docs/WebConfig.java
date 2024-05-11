@@ -1,43 +1,51 @@
 package com.apt.docs;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import com.apt.docs.DocumentEditWebSocketHandler; // Import the missing class
+import com.apt.docs.DocumentEditWebSocketHandler;
 
 @Configuration
-@EnableWebSocket
-public class WebConfig implements WebSocketConfigurer {
-    @Autowired
-    private DocumentEditWebSocketHandler documentEditWebSocketHandler;
+@EnableWebSocketMessageBroker
+public class WebConfig implements WebSocketMessageBrokerConfigurer {
+    // @Autowired
+    // private DocumentEditWebSocketHandler documentEditWebSocketHandler;
 
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(documentEditWebSocketHandler, "/document-edit");
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic");
+        config.setApplicationDestinationPrefixes("/app");
     }
-    
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/document-edit").withSockJS();
+    }
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public DocumentEditWebSocketHandler documentEditWebSocketHandler() {
+        return new DocumentEditWebSocketHandler();
+    }
+
     @Bean
     public WebMvcConfigurer corsConfig() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods(HttpMethod.GET.name(),
-                                HttpMethod.POST.name(),
-                                HttpMethod.DELETE.name())
-                        .allowedHeaders("*");
+                        .allowedOrigins("*");
             }
         };
     }
