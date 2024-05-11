@@ -1,13 +1,19 @@
 package com.apt.docs.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.apt.docs.model.document;
 import com.apt.docs.model.document_permission;
 import com.apt.docs.service.document_permission_service;
@@ -67,25 +73,45 @@ public class document_controller {
 
     @DeleteMapping("/document/{id}")
     public void deleteDocumentById(@PathVariable int id) {
-        documentService.deleteDocumentById(id);
+        documentService.deleteDocumentByID(id);
+    }
+
+    @GetMapping("/document/{id}/viewers")
+    public Iterable<document_permission> getViewersByDocumentId(@PathVariable int id) {
+        return documentPermissionService.getViewersByDocumentId(id);
     }
 
     @PostMapping("/document")
     public document saveDocument(@RequestBody document document) {
         document doc = documentService.saveDocument(document.getTitle(), document.getContent(),
                 document.getOwner().getUsername());
+
+        System.out.println(document);
         documentPermissionService.saveDocumentPermission(doc.getId(), document.getOwner().getUsername(), "owner");
         return doc;
     }
 
     @PostMapping("/document/{id}/editor/{username}")
-    public void addEditorToDocument(@PathVariable int id, @PathVariable String username) {
-        documentPermissionService.saveDocumentPermission(id, username, "editor");
+    public ResponseEntity<String> addEditorToDocument(@PathVariable int id, @PathVariable String username) {
+        try {
+            // call to the saveDocumentPermission method that might throw
+            documentPermissionService.saveDocumentPermission(id, username, "editor");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return null;
     }
 
     @PostMapping("/document/{id}/viewer/{username}")
-    public void addViewerToDocument(@PathVariable int id, @PathVariable String username) {
-        documentPermissionService.saveDocumentPermission(id, username, "viewer");
+    public ResponseEntity<String> addViewerToDocument(@PathVariable int id, @PathVariable String username) {
+        try {
+            // call to the saveDocumentPermission method that might throw
+            documentPermissionService.saveDocumentPermission(id, username, "viewer");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return null;
     }
 
     // get documents of user by useername
@@ -94,9 +120,56 @@ public class document_controller {
         return documentService.getDocumentsByUsername(username);
     }
 
+    // get documents where user is editor by useername
+    @GetMapping("/document/editor/{username}")
+    public Iterable<document_permission> getEditorDocumentsByUsername(@PathVariable String username) {
+        return documentPermissionService.getEditorDocumentsByUsername(username);
+    }
+
+    // get documents where user is viewer by useername
+    @GetMapping("/document/viewer/{username}")
+    public Iterable<document_permission> getViewerDocumentsByUsername(@PathVariable String username) {
+        return documentPermissionService.getViewerDocumentsByUsername(username);
+    }
+
     @GetMapping("/document/permissions")
     public Iterable<document_permission> getDocumentPermissions() {
         return documentPermissionService.getDocumentPermissions();
+    }
+
+    @DeleteMapping("/document/{id}/permissions/{username}")
+    public ResponseEntity<String> deleteDocumentPermission(@PathVariable int id, @PathVariable String username) {
+        try {
+            // call to the saveDocumentPermission method that might throw
+            documentPermissionService.deleteDocumentPermission(id, username);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return null;
+    }
+
+    @DeleteMapping("/document/{id}")
+    public ResponseEntity<String> deleteDocumentByID(@PathVariable int id) {
+
+        System.out.println("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+
+        try {
+            documentService.deleteDocumentByID(id);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return null;
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PatchMapping("/document/{id}/{title}")
+    public ResponseEntity<String> changeDocumentTitle(@PathVariable int id, @PathVariable String title) {
+        try {
+            documentService.changeDocumentTitle(id, title);
+            return ResponseEntity.ok("Document title changed successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }
