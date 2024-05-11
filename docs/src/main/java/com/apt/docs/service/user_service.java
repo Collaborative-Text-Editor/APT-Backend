@@ -66,7 +66,7 @@ public class user_service {
 
     public boolean checkUserPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
-
+    }
     public user getUser(String username, String password) {
         user user = userRepository.findByUsernameAndPassword(username, password);
         return user;

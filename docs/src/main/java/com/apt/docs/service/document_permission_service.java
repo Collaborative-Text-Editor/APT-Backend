@@ -54,9 +54,7 @@ public class document_permission_service {
     public Iterable<document_permission> getEditorsByDocumentId(int id) {
         return documentPermissionRepository.findByDocumentIdAndPermissionType(id, "editor");
     }
-    public Iterable<document_permission> getViewersByDocumentId(int id) {
-        return documentPermissionRepository.findByDocumentIdAndPermissionType(id, "viewer");
-    }
+
 
     public Iterable<document_permission> getViewersByDocumentId(int id) {
         return documentPermissionRepository.findByDocumentIdAndPermissionType(id, "viewer");
@@ -86,7 +84,7 @@ public class document_permission_service {
 
         documentPermissionRepository.save(documentPermission);
     }
-
+    @Transactional
     public void deleteDocumentPermissionByDocumentId(int id) {
         documentPermissionRepository.deleteByDocumentId(id);
     }

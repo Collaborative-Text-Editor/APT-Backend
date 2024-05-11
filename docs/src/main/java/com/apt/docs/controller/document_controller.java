@@ -66,15 +66,8 @@ public class document_controller {
         return documentPermissionService.getOwnerOfDocument(id);
     }
 
-    @GetMapping("/document/{id}/viewers")
-    public Iterable<document_permission> getViewersByDocumentId(@PathVariable int id) {
-        return documentPermissionService.getViewersByDocumentId(id);
-    }
 
-    @DeleteMapping("/document/{id}")
-    public void deleteDocumentById(@PathVariable int id) {
-        documentService.deleteDocumentByID(id);
-    }
+
 
     @GetMapping("/document/{id}/viewers")
     public Iterable<document_permission> getViewersByDocumentId(@PathVariable int id) {

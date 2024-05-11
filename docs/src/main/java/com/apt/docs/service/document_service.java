@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.mapping.List;
+
 import org.springframework.stereotype.Service;
 
 import com.apt.docs.model.document;
@@ -21,7 +21,6 @@ import com.apt.docs.repository.document_permission_repository;
 public class document_service {
     private final document_permission_repository documentPermissionRepository;
     private final document_repository documentRepository;
-    private final document_permission_repository documentPermissionRepository;
     private final user_repository userRepository;
     private final document_permission_service dPermissionService;
 
@@ -80,13 +79,14 @@ public class document_service {
 
     public List<document> getViewedDocsByUserId(int id) {
         Iterable<document_permission> permissions = documentPermissionRepository.findByUserIdAndPermissionType(id, "viewer");
-        
+
         List<document> documents = new ArrayList<>();
         for (document_permission permission : permissions) {
             documents.add(permission.getDocument());
         }
-        
+
         return documents;
+    }
 
     public void deleteDocumentByID(int id) {
         dPermissionService.deleteDocumentPermissionByDocumentId(id);
