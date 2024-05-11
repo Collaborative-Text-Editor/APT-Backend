@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.apt.docs.DocumentEditWebSocketHandler; // Import the missing class
@@ -21,7 +22,11 @@ public class WebConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(documentEditWebSocketHandler, "/document-edit");
     }
-
+    
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     public WebMvcConfigurer corsConfig() {
         return new WebMvcConfigurer() {

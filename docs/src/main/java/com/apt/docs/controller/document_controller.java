@@ -1,5 +1,6 @@
 package com.apt.docs.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,10 +39,30 @@ public class document_controller {
         return documentPermissionService.getEditorsByDocumentId(id);
     }
 
+    @GetMapping("/document/{id}/owneddocs")
+    public Iterable<document> getOwnedDocsByUserId(@PathVariable int id) {
+        return documentService.getOwnedDocsByUserId(id);
+    }
+
+    @GetMapping("/document/{id}/editeddocs")
+    public Iterable<document> getEditedDocsByUserId(@PathVariable int id) {
+        return documentService.getEditedDocsByUserId(id);
+    }
+
+    @GetMapping("/document/{id}/vieweddocs")
+    public Iterable<document> getViewedDocsByUserId(@PathVariable int id) {
+        return documentService.getViewedDocsByUserId(id);
+    }
+
     // get owner
     @GetMapping("/document/{id}/owner")
     public Iterable<document_permission> getOwnerOfDocument(@PathVariable int id) {
         return documentPermissionService.getOwnerOfDocument(id);
+    }
+
+    @GetMapping("/document/{id}/viewers")
+    public Iterable<document_permission> getViewersByDocumentId(@PathVariable int id) {
+        return documentPermissionService.getViewersByDocumentId(id);
     }
 
     @DeleteMapping("/document/{id}")

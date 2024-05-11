@@ -9,11 +9,15 @@ import com.apt.docs.repository.document_repository;
 import com.apt.docs.repository.user_repository;
 import com.apt.docs.model.document_permission_id;
 
+
+
+
 @Service
 public class document_permission_service {
     private final document_permission_repository documentPermissionRepository;
     private final document_repository documentRepository;
     private final user_repository userRepository;
+    
 
     public document_permission_service(document_permission_repository documentPermissionRepository,
             document_repository documentRepository, user_repository userRepository) {
@@ -67,6 +71,9 @@ public class document_permission_service {
 
     public Iterable<document_permission> getEditorsByDocumentId(int id) {
         return documentPermissionRepository.findByDocumentIdAndPermissionType(id, "editor");
+    }
+    public Iterable<document_permission> getViewersByDocumentId(int id) {
+        return documentPermissionRepository.findByDocumentIdAndPermissionType(id, "viewer");
     }
 
     public Iterable<document_permission> getOwnerOfDocument(int id) {

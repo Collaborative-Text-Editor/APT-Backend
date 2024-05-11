@@ -1,20 +1,26 @@
 package com.apt.docs.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.apt.docs.model.document;
+import com.apt.docs.model.document_permission;
 import com.apt.docs.model.user;
+import com.apt.docs.repository.document_permission_repository;
 import com.apt.docs.repository.document_repository;
 import com.apt.docs.repository.user_repository;
 
 @Service
 public class document_service {
+    private final document_permission_repository documentPermissionRepository;
     private final document_repository documentRepository;
     private final user_repository userRepository;
 
-    public document_service(document_repository documentRepository, user_repository userRepository) {
+    public document_service(document_repository documentRepository, user_repository userRepository, document_permission_repository documentPermissionRepository) {
+        this.documentPermissionRepository = documentPermissionRepository;
         this.documentRepository = documentRepository;
         this.userRepository = userRepository;
     }
@@ -47,4 +53,31 @@ public class document_service {
         System.out.println("user: " + user);
         return documentRepository.findByOwner(user);
     }
+    public Iterable<document> getOwnedDocsByUserId(int id) {
+        user user = userRepository.findById(id).orElse(null);
+        return documentRepository.findByOwner(user);
+    }
+
+    public List<document> getEditedDocsByUserId(int id) {
+        Iterable<document_permission> permissions = documentPermissionRepository.findByUserIdAndPermissionType(id, "editor");
+        
+        List<document> documents = new ArrayList<>();
+        for (document_permission permission : permissions) {
+            documents.add(permission.getDocument());
+        }
+        
+        return documents;
+    }
+
+    public List<document> getViewedDocsByUserId(int id) {
+        Iterable<document_permission> permissions = documentPermissionRepository.findByUserIdAndPermissionType(id, "viewer");
+        
+        List<document> documents = new ArrayList<>();
+        for (document_permission permission : permissions) {
+            documents.add(permission.getDocument());
+        }
+        
+        return documents;
+    }
+
 }
