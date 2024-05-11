@@ -57,4 +57,10 @@ public class user_controller {
         return userService.saveUser(user.getUsername(), user.getPassword());
     }
 
+
+    @PostMapping("/user/login")
+    public user loginUser(@RequestBody @Valid user user){
+        return userService.loginUser(user);
+    }
+
 }

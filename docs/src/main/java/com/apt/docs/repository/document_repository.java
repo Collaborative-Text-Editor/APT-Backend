@@ -9,6 +9,4 @@ public interface document_repository extends JpaRepository<document, Integer>{
 
     Iterable<document> findByOwner(user user);
 
-   
-    
 }
