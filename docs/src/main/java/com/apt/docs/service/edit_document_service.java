@@ -30,6 +30,7 @@ public class edit_document_service {
 
                 document.setContent(updatedContent);
                 documentRepository.save(document);
+                
             });
         } finally {
             lock.unlock();
@@ -51,6 +52,7 @@ public class edit_document_service {
             });
         } finally {
             lock.unlock();
+            
         }
     }
 }
