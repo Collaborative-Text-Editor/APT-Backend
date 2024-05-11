@@ -43,4 +43,9 @@ public class user_service {
         user user = userRepository.findByUsername(username);
         userRepository.delete(user);
     }
+
+    public user getUser(String username, String password) {
+        user user = userRepository.findByUsernameAndPassword(username, password);
+        return user;
+    }
 }
