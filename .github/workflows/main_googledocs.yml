@@ -41,6 +41,9 @@ jobs:
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
+        with:
+          name: java-app
+          path: ./docs
 
 
       - name: Deploy to Azure Web App
@@ -50,4 +53,4 @@ jobs:
           app-name: 'GoogleDocs'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_693E88225A4241FEA982B6ADFD383CC8 }}
-          package: '*.jar'
+          package: './docs/*.jar'
