@@ -37,10 +37,15 @@ public class RGA {
         return elements.get(index-1).getId();
     }
 
-    public static RGA fromByteArray(byte[] bytes) throws JsonProcessingException {
+    public static RGA fromByteArray(byte[] bytes) {
         ObjectMapper mapper = new ObjectMapper();
         String json = new String(bytes, StandardCharsets.UTF_8);
-        return mapper.readValue(json, RGA.class);
+        try {
+            return mapper.readValue(json, RGA.class);
+        } catch (JsonProcessingException e) {
+            System.err.println("Failed to parse JSON: " + e.getMessage());
+            return null;
+        }
     }
     public String toText() {
         StringBuilder sb = new StringBuilder();

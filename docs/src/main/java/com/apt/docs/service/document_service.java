@@ -41,7 +41,8 @@ public class document_service {
 
     public String getDocumentById(int id) throws JsonProcessingException {
         document doc = documentRepository.findById(id).orElse(null);
-
+        System.out.println("doccccccccccccccccccccccccccccccc");
+        
         RGA rga = RGA.fromByteArray(doc.getContent());
         return rga.toText();
 
