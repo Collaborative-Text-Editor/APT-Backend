@@ -38,12 +38,12 @@ public class RGA {
         System.out.println("document contentttttttttttttttttttt: ");
 
         // if (index < 0 ) {
-        //     throw new IndexOutOfBoundsException();
+        // throw new IndexOutOfBoundsException();
         // }
-        System.out.println("index: " + index );
+        System.out.println("index: " + index);
         System.out.println("elements " + elements.size());
-        System.out.println( "  " + elements.get(index-1).getId());
-        return elements.get(index-1).getId();
+        System.out.println("  " + elements.get(index - 1).getId());
+        return elements.get(index - 1).getId();
     }
 
     public static RGA fromByteArray(byte[] bytes) {
@@ -73,14 +73,21 @@ public class RGA {
         // create a new element with a unique identifier
 
         System.out.println("document contentttttttttttttttttttt: ");
-        RGAElement element = new RGAElement(siteId+clock, value, bold, italic, false);  //TODO: check if this is correct
+        RGAElement element = new RGAElement(siteId + clock, value, bold, italic, false); // TODO: check if this is
 
         // find the index of the element with the given id
-        int index = findIndexById(id);
+
+        int index;
+        if (id == "$") {
+            index = -1;
+        } else {
+            index = findIndexById(id);
+        }
         // insert the new element after it
         elements.add(index + 1, element);
-        Operation operation = new Operation("add", element.getId(), element.getValue(), element.isBold(),
-                element.isItalic());
+        // Operation operation = new Operation("add", element.getId(),
+        // element.getValue(), element.isBold(),
+        // element.isItalic());
         // sendOperation(operation);
         try {
             return toByteArray();
@@ -121,18 +128,18 @@ public class RGA {
 
     // @SendTo("/topic/document")
     // private String sendOperation(Operation operation) {
-    //     // convert the operation to a JSON string
-    //     String json = "";
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     try {
-    //         json = mapper.writeValueAsString(operation);
-    //     } catch (JsonProcessingException e) {
+    // // convert the operation to a JSON stringF
+    // String json = "";
+    // ObjectMapper mapper = new ObjectMapper();
+    // try {
+    // json = mapper.writeValueAsString(operation);
+    // } catch (JsonProcessingException e) {
 
-    //         e.printStackTrace();
-    //     }
-    //     // send the JSON string to all other replicas
-    //     // template.convertAndSend("/topic/operations", json);
-    //     return json;
+    // e.printStackTrace();
+    // }
+    // // send the JSON string to all other replicas
+    // // template.convertAndSend("/topic/operations", json);
+    // return json;
     // }
 
     public void applyOperation(Operation operation) {
@@ -147,8 +154,8 @@ public class RGA {
         // find the index of the element after which the new element should be added
         int index = findIndexById(operation.getId());
         // create a new element
-        RGAElement element = new RGAElement(siteId,operation.getValue(), operation.isBold(),
-                operation.isItalic(), false); //TODO: checkkkk
+        RGAElement element = new RGAElement(siteId, operation.getValue(), operation.isBold(),
+                operation.isItalic(), false); // TODO: checkkkk
         // add the new element to the list of elements
         elements.add(index + 1, element);
     }

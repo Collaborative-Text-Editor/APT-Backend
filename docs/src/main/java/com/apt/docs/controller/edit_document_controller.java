@@ -45,7 +45,7 @@ public class edit_document_controller {
     // }
 
     @MessageMapping("/insertOpertionInDocument")
-    @SendTo("/topic/document")
+    @SendTo("/topic/document/{id}")
     public String applyAddAfterOperation(@Payload OperationDto op) throws JsonProcessingException {
         System.out.println("opppppppppppppppppp");
         System.out.println(op.getDocumentId() + " " + op.getIndex() + " " + op.getNewContent() + " " + op.isBold()
@@ -57,7 +57,7 @@ public class edit_document_controller {
     }
 
     @MessageMapping("/deleteOpertionInDocument")
-    @SendTo("/topic/document")
+    @SendTo("/topic/document/{id}")
     public String applyRemoveOperation(@Payload OperationDto op) throws JsonProcessingException {
         return documentService.applyRemoveOperation(op.getDocumentId(), op.getIndex());
 
