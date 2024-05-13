@@ -32,6 +32,13 @@ public class RGA {
         return json.getBytes(StandardCharsets.UTF_8);
     }
 
+    public String getIdAtIndex(int index) {
+        if (index < 0 || index >= elements.size()) {
+            throw new IndexOutOfBoundsException();
+        }
+        return elements.get(index).getId();
+    }
+
     public static RGA fromByteArray(byte[] bytes) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String json = new String(bytes, StandardCharsets.UTF_8);

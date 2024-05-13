@@ -39,4 +39,5 @@ public class edit_document_controller {
         editDocumentService.deleteTextFromDocument(delete.getId(), delete.getIndex(), delete.getLength());
         return documentService.getDocumentById(delete.getId());
     }
+    
 }
