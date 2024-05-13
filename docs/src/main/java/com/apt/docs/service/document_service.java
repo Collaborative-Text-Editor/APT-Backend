@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.UUID;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.broker.SimpleBrokerMessageHandler;
 import org.springframework.stereotype.Service;
-
 import com.apt.docs.RGA;
+import com.apt.docs.RGAElement;
 import com.apt.docs.model.document;
 import com.apt.docs.model.document_permission;
 import com.apt.docs.model.user;
@@ -14,7 +17,6 @@ import com.apt.docs.repository.document_permission_repository;
 import com.apt.docs.repository.document_repository;
 import com.apt.docs.repository.user_repository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.apt.docs.repository.document_permission_repository;
 
 @Service
 public class document_service {
@@ -37,16 +39,23 @@ public class document_service {
         return documentRepository.findAll();
     }
 
-    public document getDocumentById(int id) {
-        return documentRepository.findById(id).orElse(null);
+    public String getDocumentById(int id) throws JsonProcessingException {
+        document doc = documentRepository.findById(id).orElse(null);
+
+        RGA rga = RGA.fromByteArray(doc.getContent());
+        return rga.toText();
+
     }
 
-    public document saveDocument(String title, byte[] content, String username) {
+    public document saveDocument(String title, byte[] content, String username) throws JsonProcessingException {
         document document = new document();
         user user = userRepository.findByUsername(username);
         document.setCreatedAt(LocalDateTime.now());
         document.setTitle(title);
-        document.setContent(content);
+        // Create a list of RGAElement
+        List<RGAElement> elements = new ArrayList<>();
+        RGA rga = new RGA(UUID.randomUUID().toString().substring(0, 5), elements, 0);
+        document.setContent(rga.toByteArray());
         document.setOwner(user);
         documentRepository.save(document);
         return document;
@@ -99,16 +108,19 @@ public class document_service {
 
     }
 
-    public void applyAddAfterOperation(int documentId, String id, char value,boolean bold,boolean italic) throws JsonProcessingException {
+    public String applyAddAfterOperation(int documentId, int index, char value, boolean bold, boolean italic)
+            throws JsonProcessingException {
         document document = documentRepository.findById(documentId)
                 .orElseThrow(() -> new IllegalArgumentException("Document not found"));
         // apply the operation and get the new state
         RGA rga = RGA.fromByteArray(document.getContent());
-        byte[] newState = rga.addAfter(id, value, bold,italic);
+        String id = rga.getIdAtIndex(index);
+        byte[] newState = rga.addAfter(id, value, bold, italic);
         // set the content of the document with the new state
         document.setContent(newState);
         // save the updated document back to the database
         documentRepository.save(document);
+        return rga.toText();
     }
 
     public void applyRemoveOperation(int documentId, String id) throws JsonProcessingException {

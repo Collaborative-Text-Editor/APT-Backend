@@ -18,6 +18,7 @@ import com.apt.docs.model.document;
 import com.apt.docs.model.document_permission;
 import com.apt.docs.service.document_permission_service;
 import com.apt.docs.service.document_service;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 public class document_controller {
@@ -36,7 +37,7 @@ public class document_controller {
     }
 
     @GetMapping("/document/{id}")
-    public document getDocumentById(@PathVariable int id) {
+    public String getDocumentById(@PathVariable int id) throws JsonProcessingException {
         return documentService.getDocumentById(id);
     }
 
@@ -75,10 +76,9 @@ public class document_controller {
     }
 
     @PostMapping("/document")
-    public document saveDocument(@RequestBody document document) {
+    public document saveDocument(@RequestBody document document) throws JsonProcessingException {
         document doc = documentService.saveDocument(document.getTitle(), document.getContent(),
                 document.getOwner().getUsername());
-
         System.out.println(document);
         documentPermissionService.saveDocumentPermission(doc.getId(), document.getOwner().getUsername(), "owner");
         return doc;

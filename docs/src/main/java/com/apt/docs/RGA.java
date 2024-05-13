@@ -16,14 +16,12 @@ public class RGA {
     private String siteId;
     private int clock;
 
-    private SimpMessagingTemplate template;
     
 
-    public RGA(String siteId, SimpMessagingTemplate template, List<RGAElement> elements,int clock) {
+    public RGA(String siteId, List<RGAElement> elements,int clock) {
         this.elements = elements;
         this.siteId = siteId;
         this.clock = clock;
-        this.template = template;
     }
 
     public byte[] toByteArray() throws JsonProcessingException {
@@ -36,7 +34,7 @@ public class RGA {
         if (index < 0 || index >= elements.size()) {
             throw new IndexOutOfBoundsException();
         }
-        return elements.get(index).getId();
+        return elements.get(index-1).getId();
     }
 
     public static RGA fromByteArray(byte[] bytes) throws JsonProcessingException {
@@ -101,7 +99,7 @@ public class RGA {
         }
         return -1; // not found
     }
-    @MessageMapping("/sendOperation")
+
     @SendTo("/topic/document")
     private String sendOperation(Operation operation) {
         // convert the operation to a JSON string
@@ -117,6 +115,7 @@ public class RGA {
         // template.convertAndSend("/topic/operations", json);
         return json;
     }
+    
     public void applyOperation(Operation operation) {
         if (operation.getType().equals("add")) {
             applyAddOperation(operation);
