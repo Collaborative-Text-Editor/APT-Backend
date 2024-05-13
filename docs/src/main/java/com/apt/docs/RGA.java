@@ -28,10 +28,10 @@ public class RGA {
         this.clock = clock;
     }
 
-    public byte[] toByteArray() throws JsonProcessingException {
+    public String toByteArray() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(this);
-        return json.getBytes(StandardCharsets.UTF_8);
+        return json;
     }
 
     public String getIdAtIndex(int index) {
@@ -67,7 +67,7 @@ public class RGA {
         return sb.toString();
     }
 
-    public byte[] addAfter(String id, char value, boolean bold, boolean italic) {
+    public String addAfter(String id, char value, boolean bold, boolean italic) {
         // increment the logical clock
         clock++;
         // create a new element with a unique identifier
@@ -95,7 +95,7 @@ public class RGA {
         return null;
     }
 
-    public byte[] remove(String id) throws JsonProcessingException {
+    public String remove(String id) throws JsonProcessingException {
         // find the element with the given id
         int index = findIndexById(id);
         // if the element is not found, return the current state

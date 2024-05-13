@@ -2,7 +2,7 @@ package com.apt.docs.model;
 
 public class OperationDto {
     private int documentId;
-    private int index;
+    private String index;
     private char newContent;
     private boolean isBold;
     private boolean isItalic;
@@ -15,10 +15,10 @@ public class OperationDto {
     public void setDocumentId(int documentId) {
         this.documentId = documentId;
     }
-    public int getIndex() {
+    public String getIndex() {
         return index;
     }
-    public void setIndex(int index) {
+    public void setIndex(String index) {
         this.index = index;
     }
     public char getNewContent() {

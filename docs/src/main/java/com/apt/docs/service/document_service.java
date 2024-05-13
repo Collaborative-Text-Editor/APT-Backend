@@ -44,7 +44,7 @@ public class document_service {
         System.out.println("doccccccccccccccccccccccccccccccc");
         
         RGA rga = RGA.fromByteArray(doc.getContent());
-        return rga.toText();
+        return rga.toByteArray();
 
     }
 
@@ -58,7 +58,7 @@ public class document_service {
         RGA rga = new RGA(UUID.randomUUID().toString().substring(0, 5), elements, 0);
         RGAElement element = new RGAElement(rga.getSiteId(), 'k', false, false,false);
         elements.add(element);
-        document.setContent(rga.toByteArray());
+        document.setContent(rga.toByteArray().getBytes());
         document.setOwner(user);
         documentRepository.save(document);
         return document;
@@ -111,21 +111,21 @@ public class document_service {
 
     }
 
-    public String applyAddAfterOperation(int documentId, int index, char value, boolean bold, boolean italic)
+    public String applyAddAfterOperation(int documentId, String index, char value, boolean bold, boolean italic)
             throws JsonProcessingException {
         document document = documentRepository.findById(documentId)
                 .orElseThrow(() -> new IllegalArgumentException("Document not found"));
         // apply the operation and get the new state
         RGA rga = RGA.fromByteArray(document.getContent());
-        String id = rga.getIdAtIndex(index);
+        // String id = rga.getIdAtIndex(index);
 
-        byte[] newState = rga.addAfter(id, value, bold, italic);
+        String newState = rga.addAfter(index, value, bold, italic);
         // System.out.println(newState);
         // set the content of the document with the new state
-        document.setContent(newState);
+        document.setContent(newState.getBytes());
         // save the updated document back to the database
         documentRepository.save(document);
-        return rga.toText();
+        return newState;
     }
 
     public void applyRemoveOperation(int documentId, String id) throws JsonProcessingException {
@@ -135,9 +135,9 @@ public class document_service {
         // convert the content of the document back into an RGA object
         RGA rga = RGA.fromByteArray(document.getContent());
         // apply the operation and get the new state
-        byte[] newState = rga.remove(id);
+        String newState = rga.remove(id);
         // set the content of the document with the new state
-        document.setContent(newState);
+        document.setContent(newState.getBytes());
         // save the updated document back to the database
         documentRepository.save(document);
     }
