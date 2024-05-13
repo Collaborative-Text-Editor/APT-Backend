@@ -103,9 +103,8 @@ public class RGA {
             return toByteArray();
         }
         // mark the element as deleted
-        elements.get(index).setDeleted(true);
-        Operation operation = new Operation("remove", id, elements.get(index).getValue(), elements.get(index).isBold(),
-                elements.get(index).isItalic());
+        // elements.get(index).setDeleted(true);
+        elements.remove(index);
         // sendOperation(operation);
         // return the new state
         return toByteArray();

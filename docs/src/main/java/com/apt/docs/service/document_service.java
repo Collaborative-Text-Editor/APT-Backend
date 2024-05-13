@@ -42,7 +42,7 @@ public class document_service {
     public String getDocumentById(int id) throws JsonProcessingException {
         document doc = documentRepository.findById(id).orElse(null);
         System.out.println("doccccccccccccccccccccccccccccccc");
-        
+
         RGA rga = RGA.fromByteArray(doc.getContent());
         return rga.toByteArray();
 
@@ -56,7 +56,7 @@ public class document_service {
         // Create a list of RGAElement
         List<RGAElement> elements = new ArrayList<>();
         RGA rga = new RGA(UUID.randomUUID().toString().substring(0, 5), elements, 0);
-        RGAElement element = new RGAElement(rga.getSiteId(), 'k', false, false,false);
+        RGAElement element = new RGAElement(rga.getSiteId(), 'k', false, false, false);
         elements.add(element);
         document.setContent(rga.toByteArray().getBytes());
         document.setOwner(user);
@@ -128,7 +128,7 @@ public class document_service {
         return newState;
     }
 
-    public void applyRemoveOperation(int documentId, String id) throws JsonProcessingException {
+    public String applyRemoveOperation(int documentId, String id) throws JsonProcessingException {
         // get the document from the database
         document document = documentRepository.findById(documentId)
                 .orElseThrow(() -> new IllegalArgumentException("Document not found"));
@@ -140,6 +140,7 @@ public class document_service {
         document.setContent(newState.getBytes());
         // save the updated document back to the database
         documentRepository.save(document);
+        return newState;
     }
 
     public String getDocumentContentAsString(int documentId) throws JsonProcessingException {

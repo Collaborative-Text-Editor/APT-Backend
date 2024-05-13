@@ -56,4 +56,13 @@ public class edit_document_controller {
 
     }
 
+    @MessageMapping("/deleteOpertionInDocument")
+    @SendTo("/topic/document")
+    public String applyRemoveOperation(@Payload OperationDto op) throws JsonProcessingException {
+        return documentService.applyRemoveOperation(op.getDocumentId(), op.getIndex());
+
+    }
+
+
+
 }
