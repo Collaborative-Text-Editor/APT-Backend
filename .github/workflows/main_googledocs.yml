@@ -43,6 +43,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: java-app
+          path: ./docs/pom.xml
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -51,4 +52,4 @@ jobs:
           app-name: 'GoogleDocs'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_693E88225A4241FEA982B6ADFD383CC8 }}
-          package: '*.war'
+          package: '*.jar'
