@@ -6,6 +6,8 @@ public class OperationDto {
     private char newContent;
     private boolean isBold;
     private boolean isItalic;
+
+    
     
     public int getDocumentId() {
         return documentId;

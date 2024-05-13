@@ -56,6 +56,8 @@ public class document_service {
         // Create a list of RGAElement
         List<RGAElement> elements = new ArrayList<>();
         RGA rga = new RGA(UUID.randomUUID().toString().substring(0, 5), elements, 0);
+        RGAElement element = new RGAElement(rga.getSiteId(), 'k', false, false,false);
+        elements.add(element);
         document.setContent(rga.toByteArray());
         document.setOwner(user);
         documentRepository.save(document);
@@ -116,7 +118,9 @@ public class document_service {
         // apply the operation and get the new state
         RGA rga = RGA.fromByteArray(document.getContent());
         String id = rga.getIdAtIndex(index);
+
         byte[] newState = rga.addAfter(id, value, bold, italic);
+        // System.out.println(newState);
         // set the content of the document with the new state
         document.setContent(newState);
         // save the updated document back to the database

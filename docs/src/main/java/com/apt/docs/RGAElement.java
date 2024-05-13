@@ -1,5 +1,8 @@
 package com.apt.docs;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RGAElement {
     private String id;
     private char value;
@@ -7,10 +10,11 @@ public class RGAElement {
     private boolean isBold;
     private boolean isItalic;
 
-    public RGAElement(String siteId, int clock, char value, boolean isBold, boolean isItalic) {
-        this.id = siteId + ":" + clock;
+    @JsonCreator
+    public RGAElement(@JsonProperty("id") String id, @JsonProperty("value") char value, @JsonProperty("bold") boolean isBold, @JsonProperty("italic") boolean isItalic, @JsonProperty("deleted") boolean isDeleted) {
+        this.id = id;
         this.value = value;
-        this.isDeleted = false;
+        this.isDeleted = isDeleted;
         this.isBold = isBold;
         this.isItalic = isItalic;
     }

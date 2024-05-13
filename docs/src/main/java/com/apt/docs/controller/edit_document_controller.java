@@ -47,6 +47,9 @@ public class edit_document_controller {
     @MessageMapping("/insertOpertionInDocument")
     @SendTo("/topic/document")
     public String applyAddAfterOperation(@Payload OperationDto op) throws JsonProcessingException {
+        System.out.println("opppppppppppppppppp");
+        System.out.println(op.getDocumentId() + " " + op.getIndex() + " " + op.getNewContent() + " " + op.isBold()
+                + " " + op.isItalic() + "   " );
         return documentService.applyAddAfterOperation(op.getDocumentId(), op.getIndex(), op.getNewContent(),
                 op.isBold(),
                 op.isItalic());

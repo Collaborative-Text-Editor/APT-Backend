@@ -1,9 +1,12 @@
 
 package com.apt.docs;
+
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import com.apt.docs.repository.document_repository;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -16,9 +19,10 @@ public class RGA {
     private String siteId;
     private int clock;
 
-    
-
-    public RGA(String siteId, List<RGAElement> elements,int clock) {
+    @JsonCreator
+    public RGA(@JsonProperty("siteId") String siteId,
+            @JsonProperty("elements") List<RGAElement> elements,
+            @JsonProperty("clock") int clock) {
         this.elements = elements;
         this.siteId = siteId;
         this.clock = clock;
@@ -31,9 +35,14 @@ public class RGA {
     }
 
     public String getIdAtIndex(int index) {
-        if (index < 0 || index >= elements.size()) {
-            throw new IndexOutOfBoundsException();
-        }
+        System.out.println("document contentttttttttttttttttttt: ");
+
+        // if (index < 0 ) {
+        //     throw new IndexOutOfBoundsException();
+        // }
+        System.out.println("index: " + index );
+        System.out.println("elements " + elements.size());
+        System.out.println( "  " + elements.get(index-1).getId());
         return elements.get(index-1).getId();
     }
 
@@ -47,6 +56,7 @@ public class RGA {
             return null;
         }
     }
+
     public String toText() {
         StringBuilder sb = new StringBuilder();
         for (RGAElement element : elements) {
@@ -57,27 +67,31 @@ public class RGA {
         return sb.toString();
     }
 
-
-    public byte[]  addAfter(String id, char value, boolean bold, boolean italic) {
+    public byte[] addAfter(String id, char value, boolean bold, boolean italic) {
         // increment the logical clock
         clock++;
         // create a new element with a unique identifier
-        RGAElement element = new RGAElement(siteId, clock, value, bold, italic);
+
+        System.out.println("document contentttttttttttttttttttt: ");
+        RGAElement element = new RGAElement(siteId+clock, value, bold, italic, false);  //TODO: check if this is correct
+
         // find the index of the element with the given id
         int index = findIndexById(id);
         // insert the new element after it
         elements.add(index + 1, element);
-        Operation operation = new Operation("add", element.getId(), element.getValue(), element.isBold(), element.isItalic());
-        sendOperation(operation);
+        Operation operation = new Operation("add", element.getId(), element.getValue(), element.isBold(),
+                element.isItalic());
+        // sendOperation(operation);
         try {
             return toByteArray();
         } catch (JsonProcessingException e) {
-            
+
             e.printStackTrace();
-        };
-    //////////////////////////////////////////////////////
-    ///ERROooooooooooooooooooooooooooooooRR//
-    ////////////////////////////////////////////////////
+        }
+        ;
+        //////////////////////////////////////////////////////
+        /// ERROooooooooooooooooooooooooooooooRR//
+        ////////////////////////////////////////////////////
         return null;
     }
 
@@ -90,8 +104,9 @@ public class RGA {
         }
         // mark the element as deleted
         elements.get(index).setDeleted(true);
-        Operation operation = new Operation("remove", id, elements.get(index).getValue(), elements.get(index).isBold(), elements.get(index).isItalic());
-        sendOperation(operation);
+        Operation operation = new Operation("remove", id, elements.get(index).getValue(), elements.get(index).isBold(),
+                elements.get(index).isItalic());
+        // sendOperation(operation);
         // return the new state
         return toByteArray();
     }
@@ -105,22 +120,22 @@ public class RGA {
         return -1; // not found
     }
 
-    @SendTo("/topic/document")
-    private String sendOperation(Operation operation) {
-        // convert the operation to a JSON string
-        String json = "";
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-             json = mapper.writeValueAsString(operation);
-        } catch (JsonProcessingException e) {
-            
-            e.printStackTrace();
-        }
-        // send the JSON string to all other replicas
-        // template.convertAndSend("/topic/operations", json);
-        return json;
-    }
-    
+    // @SendTo("/topic/document")
+    // private String sendOperation(Operation operation) {
+    //     // convert the operation to a JSON string
+    //     String json = "";
+    //     ObjectMapper mapper = new ObjectMapper();
+    //     try {
+    //         json = mapper.writeValueAsString(operation);
+    //     } catch (JsonProcessingException e) {
+
+    //         e.printStackTrace();
+    //     }
+    //     // send the JSON string to all other replicas
+    //     // template.convertAndSend("/topic/operations", json);
+    //     return json;
+    // }
+
     public void applyOperation(Operation operation) {
         if (operation.getType().equals("add")) {
             applyAddOperation(operation);
@@ -133,7 +148,8 @@ public class RGA {
         // find the index of the element after which the new element should be added
         int index = findIndexById(operation.getId());
         // create a new element
-        RGAElement element = new RGAElement( siteId, clock, operation.getValue(),operation.isBold(),operation.isItalic());
+        RGAElement element = new RGAElement(siteId,operation.getValue(), operation.isBold(),
+                operation.isItalic(), false); //TODO: checkkkk
         // add the new element to the list of elements
         elements.add(index + 1, element);
     }
@@ -144,7 +160,6 @@ public class RGA {
         // mark the element as deleted
         elements.get(index).setDeleted(true);
     }
-    
 
     // Getters and Setters
     public List<RGAElement> getElements() {
@@ -170,5 +185,5 @@ public class RGA {
     public void setClock(int clock) {
         this.clock = clock;
     }
-    
+
 }
