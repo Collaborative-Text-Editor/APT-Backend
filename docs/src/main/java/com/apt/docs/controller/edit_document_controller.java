@@ -44,9 +44,9 @@ public class edit_document_controller {
     //     return documentService.getDocumentById(delete.getId());
     // }
 
-    @MessageMapping("/insertOpertionInDocument")
-    @SendTo("/topic/document/{id}")
-    public String applyAddAfterOperation(@Payload OperationDto op) throws JsonProcessingException {
+    @MessageMapping("/insertOpertionInDocument/{documentId}")
+    @SendTo("/topic/document")
+    public String applyAddAfterOperation(@Payload OperationDto op,@DestinationVariable String documentId) throws JsonProcessingException {
         System.out.println(op.getDocumentId() + " " + op.getIndex() + " " + op.getNewContent() + " " + op.isBold()
                 + " " + op.isItalic() + "   " );
         return documentService.applyAddAfterOperation(op.getDocumentId(), op.getIndex(), op.getNewContent(),
@@ -55,9 +55,9 @@ public class edit_document_controller {
 
     }
 
-    @MessageMapping("/deleteOpertionInDocument")
-    @SendTo("/topic/document/{id}")
-    public String applyRemoveOperation(@Payload OperationDto op) throws JsonProcessingException {
+    @MessageMapping("/deleteOpertionInDocument/{documentId}")
+    @SendTo("/topic/document")
+    public String applyRemoveOperation(@Payload OperationDto op,@DestinationVariable String documentId) throws JsonProcessingException {
         return documentService.applyRemoveOperation(op.getDocumentId(), op.getIndex());
 
     }
