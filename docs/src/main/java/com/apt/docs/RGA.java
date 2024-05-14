@@ -149,30 +149,30 @@ public class RGA {
     // return json;
     // }
 
-    public void applyOperation(Operation operation) {
-        if (operation.getType().equals("add")) {
-            applyAddOperation(operation);
-        } else if (operation.getType().equals("remove")) {
-            applyRemoveOperation(operation);
-        }
-    }
+    // public void applyOperation(Operation operation) {
+    //     if (operation.getType().equals("add")) {
+    //         applyAddOperation(operation);
+    //     } else if (operation.getType().equals("remove")) {
+    //         applyRemoveOperation(operation);
+    //     }
+    // }
 
-    private void applyAddOperation(Operation operation) {
-        // find the index of the element after which the new element should be added
-        int index = findIndexById(operation.getId());
-        // create a new element
-        RGAElement element = new RGAElement(siteId, operation.getValue(), operation.isBold(),
-                operation.isItalic(), false); // TODO: checkkkk
-        // add the new element to the list of elements
-        elements.add(index + 1, element);
-    }
+    // private void applyAddOperation(Operation operation) {
+    //     // find the index of the element after which the new element should be added
+    //     int index = findIndexById(operation.getId());
+    //     // create a new element
+    //     RGAElement element = new RGAElement(siteId, operation.getValue(), operation.isBold(),
+    //             operation.isItalic(), false); // TODO: checkkkk
+    //     // add the new element to the list of elements
+    //     elements.add(index + 1, element);
+    // }
 
-    private void applyRemoveOperation(Operation operation) {
-        // find the index of the element to remove
-        int index = findIndexById(operation.getId());
-        // mark the element as deleted
-        elements.get(index).setDeleted(true);
-    }
+    // private void applyRemoveOperation(Operation operation) {
+    //     // find the index of the element to remove
+    //     int index = findIndexById(operation.getId());
+    //     // mark the element as deleted
+    //     elements.get(index).setDeleted(true);
+    // }
 
     // Getters and Setters
     public List<RGAElement> getElements() {
@@ -197,6 +197,22 @@ public class RGA {
 
     public void setClock(int clock) {
         this.clock = clock;
+    }
+
+    public String applyBold(String index, boolean bold) throws JsonProcessingException {
+        int i = findIndexById(index);
+        elements.get(i).setBold(bold);
+        System.out.println(elements.get(i).getValue());
+        System.out.println(elements.get(i).isBold());
+        System.out.println("booooooooooolllllllllllddd");
+        return toByteArray();
+    }
+
+    public String applyItalic(String index, boolean italic) throws JsonProcessingException {
+        int i = findIndexById(index);
+        elements.get(i).setItalic(italic);
+        return toByteArray();
+
     }
 
 }
