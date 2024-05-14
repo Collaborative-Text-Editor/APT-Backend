@@ -65,7 +65,7 @@ public class edit_document_controller {
     @MessageMapping("/formatOpertionInDocument/{documentId}")
     @SendTo("/topic/document")
     public String applyformatOperation(@Payload OperationDto op,@DestinationVariable String documentId) throws JsonProcessingException {
-        return documentService.applyformatOperation(op.getDocumentId(), op.getIndex(), op.isBold(), op.isItalic());
+        return documentService.applyformatOperation(op.getDocumentId(), op.getIndex(), op.isBold(), op.isItalic(), op.getTo());
 
     }
 

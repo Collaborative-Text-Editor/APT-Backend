@@ -158,29 +158,34 @@ public class document_service {
         return document.getTitle();
     }
 
-    public String applyBoldOperation(int documentId, String index, boolean bold)  throws JsonProcessingException{
+    // public String applyBoldOperation(int documentId, String index, boolean bold)  throws JsonProcessingException{
+    //     document document = documentRepository.findById(documentId)
+    //             .orElseThrow(() -> new IllegalArgumentException("Document not found"));
+    //     RGA rga = RGA.fromByteArray(document.getContent());
+    //     String newState = rga.applyBold(index, bold);
+    //     document.setContent(newState.getBytes());
+    //     documentRepository.save(document);
+    //     return newState;
+    // }
+
+    // public String applyItalicOperation(int documentId, String index, boolean italic) throws JsonProcessingException{
+    //     document document = documentRepository.findById(documentId)
+    //             .orElseThrow(() -> new IllegalArgumentException("Document not found"));
+    //     RGA rga = RGA.fromByteArray(document.getContent());
+    //     String newState = rga.applyItalic(index, italic);
+    //     document.setContent(newState.getBytes());
+    //     documentRepository.save(document);
+    //     return newState;
+    // }
+
+    public String applyformatOperation(int documentId, String index, boolean bold, boolean italic,int to)throws JsonProcessingException {
         document document = documentRepository.findById(documentId)
                 .orElseThrow(() -> new IllegalArgumentException("Document not found"));
         RGA rga = RGA.fromByteArray(document.getContent());
-        String newState = rga.applyBold(index, bold);
+        String newState = rga.applyFormat(index, bold, italic, to);
         document.setContent(newState.getBytes());
         documentRepository.save(document);
         return newState;
-    }
-
-    public String applyItalicOperation(int documentId, String index, boolean italic) throws JsonProcessingException{
-        document document = documentRepository.findById(documentId)
-                .orElseThrow(() -> new IllegalArgumentException("Document not found"));
-        RGA rga = RGA.fromByteArray(document.getContent());
-        String newState = rga.applyItalic(index, italic);
-        document.setContent(newState.getBytes());
-        documentRepository.save(document);
-        return newState;
-    }
-
-    public String applyformatOperation(int documentId, String index, boolean bold, boolean italic)throws JsonProcessingException {
-        applyBoldOperation(documentId, index, bold);
-        return applyItalicOperation(documentId, index, italic);
     }
 
 }

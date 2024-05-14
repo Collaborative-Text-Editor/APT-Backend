@@ -6,6 +6,7 @@ public class OperationDto {
     private char newContent;
     private boolean isBold;
     private boolean isItalic;
+    private int to;
 
     
     
@@ -38,6 +39,12 @@ public class OperationDto {
     }
     public void setItalic(boolean isItalic) {
         this.isItalic = isItalic;
+    }
+    public int getTo() {
+        return to;
+    }
+    public void setTo(int to) {
+        this.to = to;
     }
 
     

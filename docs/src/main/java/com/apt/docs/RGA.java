@@ -199,18 +199,29 @@ public class RGA {
         this.clock = clock;
     }
 
-    public String applyBold(String index, boolean bold) throws JsonProcessingException {
-        int i = findIndexById(index);
-        elements.get(i).setBold(bold);
-        System.out.println(elements.get(i).getValue());
-        System.out.println(elements.get(i).isBold());
-        System.out.println("booooooooooolllllllllllddd");
-        return toByteArray();
-    }
+    // public String applyBold(String index, boolean bold) throws JsonProcessingException {
+    //     int i = findIndexById(index);
+    //     elements.get(i).setBold(bold);
+    //     System.out.println(elements.get(i).getValue());
+    //     System.out.println(elements.get(i).isBold());
+    //     System.out.println("booooooooooolllllllllllddd");
+    //     return toByteArray();
+    // }
 
-    public String applyItalic(String index, boolean italic) throws JsonProcessingException {
+    // public String applyItalic(String index, boolean italic) throws JsonProcessingException {
+    //     int i = findIndexById(index);
+    //     elements.get(i).setItalic(italic);
+    //     return toByteArray();
+
+    // }
+
+    public String applyFormat(String index, boolean bold, boolean italic, int to) throws JsonProcessingException {
+        // sets the bold and italic attributes of the elements in the range [from, to] starting from index
         int i = findIndexById(index);
-        elements.get(i).setItalic(italic);
+        for (int j = 0; j < to; j++) {
+            elements.get(i + j).setBold(bold);
+            elements.get(i + j).setItalic(italic);
+        }
         return toByteArray();
 
     }
