@@ -104,13 +104,20 @@ public class RGA {
 
     public String remove(String id) throws JsonProcessingException {
         // find the element with the given id
-        int index = findIndexById(id);
+        int index;
+        if (id.length() < 2) {
+            index = 0;
+        } else {
+            index = findIndexById(id);
+        }
         // if the element is not found, return the current state
         if (index == -1) {
             return toByteArray();
         }
         // mark the element as deleted
         // elements.get(index).setDeleted(true);
+        System.out.println("sssssssssssssssssss");
+        System.out.println(index);
         elements.remove(index);
         // sendOperation(operation);
         // return the new state

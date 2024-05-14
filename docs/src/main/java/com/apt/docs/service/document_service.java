@@ -153,4 +153,9 @@ public class document_service {
         return rga.toText();
     }
 
+    public String getDocumentTitleById(int id) {
+        document document = documentRepository.findById(id).orElse(null);
+        return document.getTitle();
+    }
+
 }

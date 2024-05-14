@@ -41,6 +41,11 @@ public class document_controller {
         return documentService.getDocumentById(id);
     }
 
+    @GetMapping("/documentTitle/{id}")
+    public String getDocumentTitleById(@PathVariable int id) throws JsonProcessingException {
+        return documentService.getDocumentTitleById(id);
+    }
+
     @GetMapping("/document/{id}/editors")
     public Iterable<document_permission> getEditorsByDocumentId(@PathVariable int id) {
         return documentPermissionService.getEditorsByDocumentId(id);
